@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Demon Slayer: Oni-Chan's Path</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+
+  <!-- 🎵 Background Music -->
+  <audio id="bgMusic" src="audio/slayer-theme.mp3" loop></audio>
+  <button id="musicToggle">🎵 Toggle Music</button>
+  <button id="toggleInventory">🎒 Inventory</button>
+  <button id="toggleShop">🛒 Shop</button>
+
+  <!-- 🖼️ Hero Section -->
+  <section class="hero">
+    <div class="overlay"></div>
+    <div class="profile-container">
+
+      <div class="character-image">
+        <img src="images/slayer-shadow.png" alt="Slayer" />
+      </div>
+      <div id="flameAura" class="hidden"></div>
+
+      <div class="profile-card">
+        <h1 class="profile-name">You</h1>
+        <p id="motivationQuote" class="quote-box">Loading daily quote...</p>
+
+        <p id="rank">Rank: Mizunoto</p>
+        <p>Strength: <span id="strength">30</span></p>
+        <p>Speed: <span id="speed">30</span></p>
+        <p>Voice: <span id="voice">30</span></p>
+        <p>Skin: <span id="skin">30</span></p>
+
+        <div class="bar-label">EXP:</div>
+        <div class="bar"><div id="expFill" class="fill"></div></div>
+
+        <div class="bar-label">Health:</div>
+        <div class="bar"><div id="healthFill" class="fill"></div></div>
+
+        <button id="levelUpBtn">🔥 Level Up</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🎒 Inventory -->
+  <div id="inventoryPanel" class="hidden">
+    <h2>Your Inventory</h2>
+    <ul id="inventoryList"></ul>
+  </div>
+
+  <!-- 🛒 Shop -->
+  <div id="shopPanel" class="hidden">
+    <h2>Slayer Shop</h2>
+    <p>Gold: <span id="goldAmount">100</span> 💰</p>
+    <ul id="shopItems">
+      <li>🗡️ Flame Nichirin Blade – 50G <button onclick="buyItem('Flame Nichirin Blade', 50)">Buy</button></li>
+      <li>🌿 Healing Herb – 20G <button onclick="buyItem('Healing Herb', 20)">Buy</button></li>
+      <li>⚡ Thunder Blade – 70G <button onclick="buyItem('Thunder Blade', 70)">Buy</button></li>
+    </ul>
+  </div>
+<!-- 📋 Daily Slayer Tasks (Centered Under Profile) -->
+<div id="taskPanel">
+  <h2>🧘 Daily Training Completed</h2>
+  <ul id="taskList">
+    <li><input type="checkbox" data-task="pushups" disabled /> 💪 20 Push-ups</li>
+    <li><input type="checkbox" data-task="situps" disabled /> 🧘 30 Sit-ups</li>
+    <li><input type="checkbox" data-task="squats" disabled /> 🏋️‍♂️ 50 Squats</li>
+    <li><input type="checkbox" data-task="crunches" disabled /> 🌀 40 Crunches</li>
+    <li><input type="checkbox" data-task="run" disabled /> 🏃‍♂️ 10 Minute Run</li>
+  </ul>
+</div>
+
+
+</body>
+</html>
