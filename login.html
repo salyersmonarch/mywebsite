@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Slayers Path — Login</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="firebase-init.js" defer></script>
+</head>
+<body class="login-body">
+
+    <div class="login-container">
+        <img src="images/slayer-shadow.png" alt="Slayer Avatar" class="login-avatar" />
+        <h1>🔥 Slayer's Path Login 🔥</h1>
+        
+        <input type="email" id="email" placeholder="Email" /><br />
+        <input type="password" id="password" placeholder="Password" /><br />
+        <select id="starterStyle">
+            <option value="Water Breathing">🌊 Water Breathing</option>
+            <option value="Flame Breathing">🔥 Flame Breathing</option>
+            <option value="Thunder Breathing">⚡ Thunder Breathing</option>
+            <option value="Insect Breathing">🦋 Insect Breathing</option>
+          </select><br><br>
+          
+        <button onclick="signUp()">Sign Up</button>
+        <button onclick="signIn()">Sign In</button>
+      </div>
+      
+
+  <script>
+    function signUp() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(() => {
+          alert("Account created! Redirecting...");
+          window.location.href = "index.html"; // go to main game
+        })
+        .catch(err => alert(err.message));
+    }
+
+    function signIn() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(() => {
+          alert("Welcome back, Slayer!");
+          window.location.href = "index.html"; // go to main game
+        })
+        .catch(err => alert(err.message));
+    }
+  </script>
+
+</body>
+</html>

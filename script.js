@@ -79,7 +79,9 @@ function saveAll() {
   localStorage.setItem("slayerRankIndex", rankIndex);
   localStorage.setItem("slayerGold", gold);
   localStorage.setItem("slayerInventory", JSON.stringify(inventory));
+  showSaveToast(); // 👈 NEW
 }
+
 
 // === QUOTES ===
 
@@ -202,3 +204,11 @@ toggleShop.addEventListener("click", () => {
 updateStats();
 loadQuote();
 loadTasks();
+function showSaveToast() {
+  const toast = document.getElementById("saveToast");
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2000);
+}
