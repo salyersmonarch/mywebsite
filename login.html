@@ -2,60 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Slayers Path — Login</title>
   <link rel="stylesheet" href="style.css" />
-
+  
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+
+  <!-- Firebase Setup -->
   <script src="firebase-init.js" defer></script>
+
+  <!-- Auth Logic -->
+  <script src="auth.js" defer></script>
 </head>
+
 <body class="login-body">
 
-    <div class="login-container">
-        <img src="images/slayer-shadow.png" alt="Slayer Avatar" class="login-avatar" />
-        <h1>🔥 Slayer's Path Login 🔥</h1>
-        
-        <input type="email" id="email" placeholder="Email" /><br />
-        <input type="password" id="password" placeholder="Password" /><br />
-        <select id="starterStyle">
-            <option value="Water Breathing">🌊 Water Breathing</option>
-            <option value="Flame Breathing">🔥 Flame Breathing</option>
-            <option value="Thunder Breathing">⚡ Thunder Breathing</option>
-            <option value="Insect Breathing">🦋 Insect Breathing</option>
-          </select><br><br>
-          
-        <button onclick="signUp()">Sign Up</button>
-        <button onclick="signIn()">Sign In</button>
-      </div>
-      
+  <div class="login-container">
+    <img src="images/slayer-shadow.png" alt="Slayer Avatar" class="login-avatar" />
+    <h1>🔥 Slayer's Path Login 🔥</h1>
 
-  <script>
-    function signUp() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+    <input type="email" id="email" placeholder="Email" required /><br />
+    <input type="password" id="password" placeholder="Password" required /><br />
+    
+    <select id="starterStyle">
+      <option value="Water Breathing">🌊 Water Breathing</option>
+      <option value="Flame Breathing">🔥 Flame Breathing</option>
+      <option value="Thunder Breathing">⚡ Thunder Breathing</option>
+      <option value="Insect Breathing">🦋 Insect Breathing</option>
+    </select><br><br>
 
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then(() => {
-          alert("Account created! Redirecting...");
-          window.location.href = "index.html"; // go to main game
-        })
-        .catch(err => alert(err.message));
-    }
+    <button onclick="signUp()">📝 Sign Up</button>
+    <button onclick="signIn()">🔐 Sign In</button>
 
-    function signIn() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+    <p id="errorMessage" style="color: red;"></p>
 
-      firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(() => {
-          alert("Welcome back, Slayer!");
-          window.location.href = "index.html"; // go to main game
-        })
-        .catch(err => alert(err.message));
-    }
-  </script>
+  </div>
 
 </body>
 </html>

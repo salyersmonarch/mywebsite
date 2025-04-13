@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Slayers Path</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+  <script src="firebase-init.js" defer></script>
+
+  <!-- 🔐 Auth check and data fetch -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      firebase.auth().onAuthStateChanged(user => {
+        if (!user) {
+          console.log("User not logged in, redirecting...");
+          window.location.href = "login.html";
+        } else {
+          console.log("Logged in as:", user.email);
+          const uid = user.uid;
+          firebase.database().ref("users/" + uid).once("value").then(snapshot => {
+            const data = snapshot.val();
+            if (data) {
+              document.getElementById("rank").textContent = "Rank: " + data.rank;
+              document.getElementById("strength").textContent = data.strength;
+              document.getElementById("speed").textContent = data.speed;
+              document.getElementById("voice").textContent = data.voice;
+              document.getElementById("skin").textContent = data.skin;
+              document.getElementById("goldAmount").textContent = data.gold;
+            }
+          });
+        }
+      });
+    });
+
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        window.location.href = "login.html";
+      });
+    }
+  </script>
+
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script-ranked.js"></script>
+</head>
+
+<body>
+  <!-- 🔊 Controls -->
+  <audio id="bgMusic" src="audio/slayer-theme.mp3" loop></audio>
+  <button id="musicToggle">🎵 Toggle Music</button>
+  <button id="toggleInventory">🎒 Inventory</button>
+  <button id="toggleShop">🛒 Shop</button>
+  <button id="changeBgBtn">🌄 Change Background</button>
+  <button onclick="logout()">🚪 Log Out</button>
+
+  <!-- 🖼️ Hero Section -->
+  <section class="hero">
+    <div class="overlay"></div>
+    <div class="profile-container">
+
+      <div class="character-image">
+        <img src="images/slayer-shadow.png" alt="Slayer" style="width:200px; height:200px; border-radius: 80%;" />
+      </div>
+      <div id="flameAura" class="hidden"></div>
+
+      <div class="profile-card">
+        <h1 class="profile-name">You</h1>
+        <p id="motivationQuote" class="quote-box">Loading daily quote...</p>
+        <div id="rankBox">
+          <span id="rank">Rank: Mizunoto</span>
+        </div>
+        <p>Strength: <span id="strength">30</span></p>
+        <p>Speed: <span id="speed">30</span></p>
+        <p>Voice: <span id="voice">30</span></p>
+        <p>Skin: <span id="skin">30</span></p>
+        <div id="streakBox">
+          🔥 Streak: <span id="streakCount">0</span> Days
+        </div>
+
+        <div class="bar-label">EXP:</div>
+        <div class="bar"><div id="expFill" class="fill"></div></div>
+
+        <div class="bar-label">Health:</div>
+        <div class="bar"><div id="healthFill" class="fill"></div></div>
+
+        <button id="levelUpBtn">🔥 Level Up</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🎒 Inventory -->
+  <div id="inventoryPanel" class="hidden">
+    <h2>Your Inventory</h2>
+    <ul id="inventoryList"></ul>
+  </div>
+
+  <!-- 🛒 Shop -->
+  <div id="shopPanel" class="hidden">
+    <h2>Slayer Shop</h2>
+    <p>Gold: <span id="goldAmount">100</span> 💰</p>
+    <ul id="shopItems">
+      <li>🗡️ Flame Nichirin Blade – 50G <button onclick="buyItem('Flame Nichirin Blade', 50)">Buy</button></li>
+      <li>🌿 Healing Herb – 20G <button onclick="buyItem('Healing Herb', 20)">Buy</button></li>
+      <li>⚡ Thunder Blade – 70G <button onclick="buyItem('Thunder Blade', 70)">Buy</button></li>
+    </ul>
+  </div>
+
+  <!-- 🏆 Leaderboard -->
+  <div id="leaderboardPanel" class="hidden">
+    <h3>🏆 Leaderboard</h3>
+    <ul id="leaderboardList"></ul>
+  </div>
+  <button id="toggleLeaderboard">🏆 Leaderboard</button>
+
+  <!-- 🧘 Daily Tasks -->
+  <div id="taskPanel">
+    <h2>🧘 Daily Training Completed</h2>
+    <ul id="taskList">
+      <li><input type="checkbox" data-task="pushups" /> 💪 <span id="label-pushups">20</span> Push-ups</li>
+      <li><input type="checkbox" data-task="situps" /> 🧘 <span id="label-situps">30</span> Sit-ups</li>
+      <li><input type="checkbox" data-task="squats" /> 🦵 <span id="label-squats">50</span> Squats</li>
+      <li><input type="checkbox" data-task="crunches" /> 🌀 <span id="label-crunches">40</span> Crunches</li>
+      <li><input type="checkbox" data-task="run" /> 🏃 <span id="label-run">10</span> Minute Run</li>
+    </ul>
+  </div>
+
+  <div id="saveToast" class="hidden">💾 Progress Saved!</div>
+  <div id="popup" class="popup hidden">You ranked up!</div>
+  <div id="hinokamiEffect"></div>
+  <div id="game-content" style="display: none;">
+    <!-- Your whole Demon Slayer profile UI goes here -->
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          const uid = user.uid;
+          db.ref("users/" + uid).once("value").then(snapshot => {
+            const data = snapshot.val();
+            if (data) {
+              document.getElementById("rank").textContent = "Rank: " + data.rank;
+              document.getElementById("strength").textContent = data.strength;
+              document.getElementById("speed").textContent = data.speed;
+              document.getElementById("voice").textContent = data.voice;
+              document.getElementById("skin").textContent = data.skin;
+              document.getElementById("goldAmount").textContent = data.gold;
+            }
+          });
+        }
+      });
+    });
+  
+    function logout() {
+      auth.signOut().then(() => {
+        window.location.href = "login.html";
+      });
+    }
+  </script>
+  
+</body>
+</html>

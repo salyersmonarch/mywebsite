@@ -1,7 +1,6 @@
 // auth.js
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Wait until Firebase and auth are loaded
     const waitForFirebase = setInterval(() => {
       if (typeof firebase !== "undefined" && firebase.auth && firebase.database) {
         clearInterval(waitForFirebase);
@@ -9,15 +8,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const auth = firebase.auth();
         const db = firebase.database();
   
-        // Auto redirect if user already logged in
+        // ✅ Only redirect if user is logged in AND on login page
         auth.onAuthStateChanged(user => {
           if (user) {
             console.log("Already signed in:", user.email);
-            window.location.href = "index.html";
+            window.location.href = "game.html"; // ✅ redirect to your real app page
           }
         });
   
-        // 🎯 Login function
+        // 🔐 Login
         window.signIn = function () {
           const email = document.getElementById("email").value.trim();
           const password = document.getElementById("password").value;
@@ -25,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
           auth.signInWithEmailAndPassword(email, password)
             .then(() => {
               alert("Welcome back!");
-              window.location.href = "index.html";
+              window.location.href = "game.html";
             })
             .catch(error => {
               console.error("Sign-in error:", error);
@@ -33,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         };
   
-        // 🎯 Signup function
+        // 📝 Signup
         window.signUp = function () {
           const email = document.getElementById("email").value.trim();
           const password = document.getElementById("password").value;
@@ -55,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .then(() => {
               alert("Account created! Redirecting...");
-              window.location.href = "index.html";
+              window.location.href = "game.html";
             })
             .catch(err => {
               console.error("Sign-up error:", err);
@@ -63,6 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         };
       }
-    }, 100); // Check every 100ms
+    }, 100);
   });
   
